@@ -1,4 +1,4 @@
-import { Rubik_Mono_One } from "next/font/google";
+import { Rubik, Rubik_Mono_One } from "next/font/google";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -9,10 +9,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        rubikMonoOne: ["RubikMonoOne", "sans-serif"],
-        rubik: ["Rubik", "sans-serif"],
-      },
       backgroundImage: {
         "gradient-radial":
           "radial-gradient(var(--tw-gradient-stops))",
@@ -29,6 +25,9 @@ const config: Config = {
         "white-ish": "#FFFEF5",
         "black-ish": "#222222",
         "light-black": "#333333",
+      },
+      boxShadow: {
+        'b': '0 7px 0 0 #222222',
       },
     },
   },

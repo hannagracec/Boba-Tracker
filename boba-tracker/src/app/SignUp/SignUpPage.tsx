@@ -16,7 +16,7 @@ const SIGNUP_BUTTON_PRESSED_STYLES =
 const LOGIN_BUTTON_STYLES =
   "bg-medium-pink py-3 rounded-[30px] border-2 border-black-ish shadow-b w-full mb-10";
 
-const LoginPage = () => {
+const SignUpPage = () => {
   return (
     <div className="text-black-ish p-6 w-full max-w-[500px]">
       <div className="flex flex-col items-center border-2 border-black-ish rounded-lg bg-off-white p-4 shadow-b">
@@ -27,7 +27,9 @@ const LoginPage = () => {
           alt="Solid star icon"
           className="mb-4"
         />
-        <h1 className="text-3xl font-black mb-4">Log In</h1>
+        <h1 className="text-3xl font-black mb-4">
+          Create Account
+        </h1>
         <div className="w-full my-4">
           <input
             placeholder="Enter Username"
@@ -39,12 +41,17 @@ const LoginPage = () => {
             type="password"
             className={`${SIGNUP_INPUT_CONTAINER_STYLES} ${SIGNUP_INPUT_FOCUSED_STLYES}`}
           />
+          <input
+            placeholder="Re-enter Password"
+            type="password"
+            className={`${SIGNUP_INPUT_CONTAINER_STYLES} ${SIGNUP_INPUT_FOCUSED_STLYES}`}
+          />
         </div>
         <div className="w-[90%]">
           <button
             className={`${SIGNUP_BUTTON_STYLES} ${SIGNUP_BUTTON_PRESSED_STYLES}`}
           >
-            <p className="text-md font-black">Sign In</p>
+            <p className="text-md font-black">Sign Up</p>
           </button>
           <button
             className={`${SIGNUP_BUTTON_STYLES} ${SIGNUP_BUTTON_PRESSED_STYLES}`}
@@ -63,13 +70,13 @@ const LoginPage = () => {
               </p>
             </div>
           </button>
-          <Link href="/SignUp">
+          <Link href="/Login">
             <button
               className={`${LOGIN_BUTTON_STYLES} ${SIGNUP_BUTTON_PRESSED_STYLES}`}
             >
               <p className="text-sm font-medium">
-                Don&apos;t have an account?{" "}
-                <span className="font-black">Sign Up</span>
+                Already have an account?{" "}
+                <span className="font-black">Log In</span>
               </p>
             </button>
           </Link>
@@ -79,4 +86,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

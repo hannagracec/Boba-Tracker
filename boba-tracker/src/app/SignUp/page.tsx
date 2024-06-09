@@ -1,9 +1,9 @@
-import LoginPage from "./LoginPage";
+import SignUpPage from "./SignUpPage";
 
-export default function Login() {
+export default function SignUp() {
   return (
     <div className="bg-coral-pink flex justify-center items-center h-screen">
-      <LoginPage />
+      <SignUpPage />
     </div>
   );
 }

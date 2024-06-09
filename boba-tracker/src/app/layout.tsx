@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { rubik } from "./fonts";
+import "@/src/app/globals.css";
 
 export const metadata: Metadata = {
   title: "Boba Tracker",
@@ -23,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className={rubik.className}>
+      <body>{children}</body>
     </html>
   );
 }

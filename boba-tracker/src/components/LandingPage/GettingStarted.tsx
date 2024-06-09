@@ -39,7 +39,7 @@ const GettingStarted = () => {
           Start tracking your perfect boba blend at every store!
         </h2>
         <Link href="/AboutUs">
-          <button className="flex items-center bg-off-white py-2 w-full justify-center border-2 border-black-ish rounded-lg shadow-b focus:shadow-none focus:mt-12">
+          <button className="flex items-center bg-off-white py-2 w-full justify-center border-2 border-black-ish rounded-lg shadow-b focus:outline-black-ish transition-all duration-200 active:shadow-none active:translate-y-1 active:border-black-ish">
             <p className="text-xl font-black mr-2">Get Started</p>
             <Image 
               src={circle_arrow}

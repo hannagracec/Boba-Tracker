@@ -1,7 +1,9 @@
+import AboutUsPage from "./AboutUsPage"
+
 export default function AboutUs() {
   return(
-    <div>
-      <div>HELLO</div>
+    <div className="h-screen bg-coral-pink flex items-center justify-center">
+      <AboutUsPage />
     </div>
   )
 }

@@ -29,6 +29,14 @@ const config: Config = {
       boxShadow: {
         'b': '0 7px 0 0 #222222',
       },
+      transitionProperty: {
+        'box-shadow': 'box-shadow',
+      },
+    },
+  },
+  variants: {
+    extend: {
+      boxShadow: ['active'],
     },
   },
   plugins: [],

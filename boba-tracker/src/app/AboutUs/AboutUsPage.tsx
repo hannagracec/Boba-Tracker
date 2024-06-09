@@ -17,10 +17,18 @@ const browse_alt = "Search icon";
 const heart_alt = "Heart icon";
 const star_alt = "Shooting star icon";
 
+const ABOUT_US_CONTENT_STYLES = "flex flex-col items-center p-4";
+
+const SIGNMEUP_BUTTON_STYLES = 
+    "flex items-center bg-pastel-pink py-2 px-4 w-full max-w-xs justify-center border-2 border-black-ish rounded-3xl shadow-b";
+const SIGNMEUP_PRESSED_BUTTON_STYLES = 
+    "focus:outline-black-ish transition-all duration-200 active:shadow-none active:translate-y-0.5 active:border-black-ish";
+const SIGNMEUP_BUTTON_TEXT_STYLES = "text-xl font-black text-black-ish";
+
 const AboutUsPage = () => {
   return(
     <div>
-      <div className="flex flex-col items-center p-4">
+      <div className={ABOUT_US_CONTENT_STYLES}>
         <div className={`text-5xl flex ${rubik_mono_one.className} mb-6`}>
           <h1>About</h1>
           <Image
@@ -38,8 +46,8 @@ const AboutUsPage = () => {
           <InfoTile icon={shooting_star_icon} text={rate_blurb} alt={star_alt} />
         </div>
         <Link href="/Login">
-          <button className="flex items-center bg-pastel-pink py-2 px-4 w-full max-w-xs justify-center border-2 border-black-ish rounded-3xl shadow-b focus:outline-black-ish transition-all duration-200 active:shadow-none active:translate-y-0.5 active:border-black-ish">
-            <p className="text-xl font-black text-black-ish">Sign me up!</p>
+          <button className={`${SIGNMEUP_BUTTON_STYLES} ${SIGNMEUP_PRESSED_BUTTON_STYLES}`}>
+            <p className={SIGNMEUP_BUTTON_TEXT_STYLES}>Sign me up!</p>
           </button>
         </Link>
       </div>

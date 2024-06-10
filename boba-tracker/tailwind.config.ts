@@ -24,6 +24,7 @@ const config: Config = {
       boxShadow: {
         b: "0 7px 0 0 #222222",
         t: "0 -2px 0 0 #222222",
+        s: "0 5px 0 0 #222222",
       },
       transitionProperty: {
         "box-shadow": "box-shadow",

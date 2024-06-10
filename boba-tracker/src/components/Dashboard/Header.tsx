@@ -6,7 +6,7 @@ const circle_logo = "/Header/circle_logo.svg";
 
 const Header = () => {
   return (
-    <div className="px-4 py-10 flex justify-between">
+    <div className="px-4 pt-10 flex justify-between">
       <div className="flex items-center">
         <Image
           src={star_border_icon}

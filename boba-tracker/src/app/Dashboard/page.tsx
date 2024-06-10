@@ -1,7 +1,9 @@
+import DashboardPage from "./DashboardPage";
+
 export default function Dashboard() {
   return (
     <div>
-      <div></div>
+      <DashboardPage />
     </div>
   );
 }

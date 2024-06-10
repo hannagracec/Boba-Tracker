@@ -25,7 +25,7 @@ const Header = () => {
         <Image
           src={circle_logo}
           height={40}
-          width={35}
+          width={40}
           alt="Boba Tracker logo"
         />
       </div>

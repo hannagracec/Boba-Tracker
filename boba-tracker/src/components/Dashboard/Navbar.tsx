@@ -9,7 +9,7 @@ const shop_icon = "/Navbar/shop.svg";
 const profile_icon = "/Navbar/profile.svg";
 
 const CURRENT_PAGE_ICON_STYLES =
-  "bg-medium-pink py-1 px-[18px] rounded-3xl border-2 border-black-ish shadow-b";
+  "bg-medium-pink py-1 px-6 rounded-3xl border-2 border-black-ish shadow-b";
 
 interface NavLinkProps {
   href: string;
@@ -45,9 +45,7 @@ const Navbar = () => {
       <Link href={href}>
         <div
           className={
-            isActive
-              ? CURRENT_PAGE_ICON_STYLES
-              : "mx-[20px]"
+            isActive ? CURRENT_PAGE_ICON_STYLES : ""
           }
           onClick={handleClick}
         >
@@ -58,8 +56,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed bottom-0 w-full bg-white-ish shadow-t rounded-t-[18px]">
-      <div className="flex items-center justify-center py-10">
+    <div className="fixed bottom-0 w-full flex justify-center bg-white-ish shadow-t rounded-t-[18px] px-10">
+      <div className="flex items-center w-full justify-between py-10 max-w-[500px]">
         <NavLink href="/Dashboard">
           <Image
             src={house_icon}

@@ -23,4 +23,4 @@ The **Boba Tracker App** is a mobile application designed to help users track th
 - Firebase (Authentication, Firestore)
 
 ## Contact 🌟
-For questions, inquiries, and feedback, please contact me via email (hannacho847@gmail.com)!
+For questions, inquiries, and feedback, please contact me via email: hannacho847@gmail.com!

@@ -17,22 +17,20 @@ interface NavLinkProps {
 }
 
 const Navbar = () => {
-  const [currentPath, setCurrentPath] = useState<string>(
-    window.location.pathname
-  );
+  const [currentPath, setCurrentPath] =
+    useState<string>("");
 
   useEffect(() => {
-    const handleRouteChange = () => {
+    const updatePath = () => {
       setCurrentPath(window.location.pathname);
     };
 
-    window.addEventListener("popstate", handleRouteChange);
+    updatePath();
+
+    window.addEventListener("popstate", updatePath);
 
     return () => {
-      window.removeEventListener(
-        "popstate",
-        handleRouteChange
-      );
+      window.removeEventListener("popstate", updatePath);
     };
   }, []);
 

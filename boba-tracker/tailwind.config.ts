@@ -9,12 +9,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial":
-          "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
       colors: {
         "off-white": "#FEFCEB",
         "coral-pink": "#FF908F",
@@ -25,18 +19,19 @@ const config: Config = {
         "white-ish": "#FFFEF5",
         "black-ish": "#222222",
         "light-black": "#333333",
+        "slight-grey": "#EEEDE9",
       },
       boxShadow: {
-        'b': '0 7px 0 0 #222222',
+        b: "0 7px 0 0 #222222",
       },
       transitionProperty: {
-        'box-shadow': 'box-shadow',
+        "box-shadow": "box-shadow",
       },
     },
   },
   variants: {
     extend: {
-      boxShadow: ['active'],
+      boxShadow: ["active", "focus"],
     },
   },
   plugins: [],

@@ -22,7 +22,7 @@ const VERTICAL_TILE_STYLES =
 
 const DashboardPage = () => {
   return (
-    <div className="overflow-y-auto pb-[160px] text-black-ish p-4 flex flex-col items-center mt-2">
+    <div className="overflow-y-auto pb-[160px] bg-off-white text-black-ish p-4 flex flex-col items-center mt-2">
       <div className={PROFILE_TILE_STYLES}>
         <div className="flex">
           <div className="mr-6 border-2 border-black-ish shadow-s bg-pastel-pink size-[100px] flex justify-center rounded-[50px]">

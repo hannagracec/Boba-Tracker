@@ -7,10 +7,24 @@ const circle_arrow = "/Dashboard/circle_arrow_right.svg";
 const shop_icon = "/Dashboard/shop.svg";
 const add_icon = "/Dashboard/add_circle.svg";
 
+const DASHBOARD_PAGE_STYLES = "overflow-y-auto pb-[160px] bg-off-white text-black-ish p-4 flex flex-col items-center mt-2";
+
 const PROFILE_TILE_STYLES =
   "bg-white-ish px-4 py-3 w-full max-w-[600px] border-2 border-black-ish rounded-lg shadow-b";
+const PROFILE_ICON_CONTAINER_STYLES = 
+  "mr-6 border-2 border-black-ish shadow-s bg-pastel-pink size-[100px] flex justify-center rounded-[50px]";
 const PROFILE_BUTTON_STYLES =
   "flex items-center bg-medium-pink py-0.5 px-6 rounded-[30px] border-2 border-black-ish shadow-s w-full mb-4";
+
+const DASHBOARD_CONTENT_STYLES = "mt-10 max-w-[600px] w-full";
+const DASHBOARD_CONTENT_HEADER_STYLES = "font-semibold text-2xl ml-2 mb-2";
+
+const BOBA_SAVED_CONTAINER_STYLES = 
+  "mr-3 text-center flex flex-col justify-center border-2 border-black-ish rounded-md bg-pink-pink size-[105px]";
+const CATALOGUE_TEXT_STYLES = "font-semibold text-xs leading-[1.2] max-w-[230px]";
+
+const STORES_ICON_CONTAINER_STYLES = "border-2 border-black-ish p-4 bg-deep-coral rounded-[50px] mb-4";
+const ADD_DRINK_ICON_CONTAINER_STYLES = "border-2 border-black-ish p-4 bg-medium-pink rounded-[50px] mb-4";
 
 const BUTTON_PRESSED_STYLES =
   "focus:outline-black-ish transition-all duration-200 active:shadow-none active:translate-y-0.5 active:border-black-ish";
@@ -22,10 +36,10 @@ const VERTICAL_TILE_STYLES =
 
 const DashboardPage = () => {
   return (
-    <div className="overflow-y-auto pb-[160px] bg-off-white text-black-ish p-4 flex flex-col items-center mt-2">
+    <div className={DASHBOARD_PAGE_STYLES}>
       <div className={PROFILE_TILE_STYLES}>
         <div className="flex">
-          <div className="mr-6 border-2 border-black-ish shadow-s bg-pastel-pink size-[100px] flex justify-center rounded-[50px]">
+          <div className={PROFILE_ICON_CONTAINER_STYLES}>
             <Image
               src={profile_icon}
               height={80}
@@ -58,15 +72,15 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
-      <div className="mt-10 max-w-[600px] w-full">
-        <h1 className="font-semibold text-2xl ml-2 mb-2">
+      <div className={DASHBOARD_CONTENT_STYLES}>
+        <h1 className={DASHBOARD_CONTENT_HEADER_STYLES}>
           Your Dashboard
         </h1>
         <Link href="/Dashboard/Catalogue">
           <button
             className={`${BOBA_CATALOGUE_PANEL_STYLES} ${BUTTON_PRESSED_STYLES}`}
           >
-            <div className="mr-3 text-center flex flex-col justify-center border-2 border-black-ish rounded-md bg-pink-pink size-[105px]">
+            <div className={BOBA_SAVED_CONTAINER_STYLES}>
               {/* DYNAMICALLY CHANGE */}
               <h1 className="font-black text-[40px]">10</h1>
               <h3 className="font-semibold text-xs">
@@ -77,7 +91,7 @@ const DashboardPage = () => {
               <h1 className="font-black text-2xl mb-1">
                 Boba Catalogue
               </h1>
-              <p className="font-semibold text-xs leading-[1.2] max-w-[230px]">
+              <p className={CATALOGUE_TEXT_STYLES}>
                 Add more drinks to your catalogue to track
                 your preferences!
               </p>
@@ -99,7 +113,7 @@ const DashboardPage = () => {
             <button
               className={`${VERTICAL_TILE_STYLES} ${BUTTON_PRESSED_STYLES}`}
             >
-              <div className="border-2 border-black-ish p-4 bg-deep-coral rounded-[50px] mb-4">
+              <div className={STORES_ICON_CONTAINER_STYLES}>
                 <Image
                   src={shop_icon}
                   height={40}
@@ -119,7 +133,7 @@ const DashboardPage = () => {
             <button
               className={`${VERTICAL_TILE_STYLES} ${BUTTON_PRESSED_STYLES}`}
             >
-              <div className="border-2 border-black-ish p-4 bg-medium-pink rounded-[50px] mb-4">
+              <div className={ADD_DRINK_ICON_CONTAINER_STYLES}>
                 <Image
                   src={add_icon}
                   height={40}

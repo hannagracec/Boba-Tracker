@@ -8,6 +8,10 @@ const plus_icon = "/Navbar/plus.svg";
 const shop_icon = "/Navbar/shop.svg";
 const profile_icon = "/Navbar/profile.svg";
 
+const NAVBAR_CONTAINER_STYLES = 
+"flex justify-center bg-white-ish shadow-t rounded-t-[18px] px-6";
+const NAVBAR_ICONS_STYLES = "flex items-center w-full justify-between py-10 max-w-[500px]";
+
 const CURRENT_PAGE_ICON_STYLES =
   "bg-medium-pink py-1 px-6 rounded-3xl border-2 border-black-ish shadow-b";
 
@@ -56,9 +60,9 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-off-white fixed bottom-0 w-full">
-      <div className="flex justify-center bg-white-ish shadow-t rounded-t-[18px] px-6">
-        <div className="flex items-center w-full justify-between py-10 max-w-[500px]">
+    <div className="fixed bottom-0 w-full">
+      <div className={NAVBAR_CONTAINER_STYLES}>
+        <div className={NAVBAR_ICONS_STYLES}>
           <NavLink href="/Dashboard">
             <Image
               src={house_icon}

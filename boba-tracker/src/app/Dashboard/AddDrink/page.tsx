@@ -1,7 +1,10 @@
+"use client";
+import SelectDrinkPage from "./SelectDrinkPage";
+
 export default function AddDrink() {
   return (
     <div>
-      <div></div>
+      <SelectDrinkPage />
     </div>
   );
 }

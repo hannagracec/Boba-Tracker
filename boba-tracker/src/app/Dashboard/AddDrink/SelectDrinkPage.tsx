@@ -38,7 +38,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 
-const AddDrinkPage = () => {
+const SelectDrinkPage = () => {
   const [selectedStore, setSelectedStore] = useState<{ name: string; drinks: { name: string; toppings: string[]; }[] } | null>(null);
   const [selectedDrink, setSelectedDrink] = useState<{ name: string; toppings: string[]; } | null>(null);
   const [selectedTopping, setSelectedTopping] = useState('');
@@ -121,36 +121,34 @@ const AddDrinkPage = () => {
     return 'Extra';
   };
 
-  const addDrinkToDatabase = async () => {
-    if (!selectedStore || !selectedDrink || !user) {
-      setMessage('Please select a store and a drink.');
+  const handleAddDrink = async () => {
+    if (!selectedStore || !selectedDrink) {
+      setMessage('Please select a store and a drink');
       setMessageType('error');
       return;
     }
 
-    const newDrink = {
-      store: selectedStore.name,
-      drink: selectedDrink.name,
-      topping: selectedTopping,
-      sugarLevel,
-      iceLevel,
-      rating,
-      isFavourite,
-    };
-
     try {
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
       const userDocRef = doc(db, 'users', user.uid);
-      const userEmail = user.email;
-      const username = user.displayName;
-
-      await setDoc(userDocRef, { email: userEmail, username: username || '' }, { merge: true });
-
       const drinksCollectionRef = collection(userDocRef, 'drinks');
-      await addDoc(drinksCollectionRef, newDrink);
+
+      await addDoc(drinksCollectionRef, {
+        store: selectedStore.name,
+        drink: selectedDrink.name,
+        toppings: selectedTopping ? [selectedTopping] : [],
+        sugarLevel,
+        iceLevel,
+        rating,
+        isFavourite,
+      });
 
       setMessage('Drink added successfully!');
       setMessageType('success');
-
     } catch (error: any) {
       setMessage(`Error adding drink: ${error.message}`);
       setMessageType('error');
@@ -290,33 +288,32 @@ const AddDrinkPage = () => {
             }}
           />
         </div>
+        <div className="flex justify-between">
+          <div className="mb-6">
+            <label className="block mb-1 font-semibold">Rating</label>
+            <div className="flex text-2xl">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FaStar
+                  key={star}
+                  className={`cursor-pointer ${rating >= star ? 'text-deep-coral' : 'text-gray-300'}`}
+                  onClick={() => setRating(star)}
+                />
+              ))}
+            </div>
+          </div>
 
-        <div className="mb-6">
-          <label className="block mb-1 font-semibold">Rating</label>
-          <div className="flex">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <FaStar
-                key={star}
-                className={`cursor-pointer ${rating >= star ? 'text-deep-coral text-xl' : 'text-gray-300 text-xl'}`}
-                onClick={() => setRating(star)}
-              />
-            ))}
+          <div className="mb-6">
+            <button
+              onClick={() => setIsFavourite(!isFavourite)}
+            >
+              <label className="block mb-1 font-semibold">Favourite</label>
+              <FaHeart className={`${isFavourite ? 'text-deep-coral' : 'text-gray-300'} mx-auto text-2xl`}/>
+            </button>
           </div>
         </div>
-
-        <div className="mb-6">
-          <button
-            className={`flex items-center ${isFavourite ? 'text-deep-coral' : 'text-black-ish'}`}
-            onClick={() => setIsFavourite(!isFavourite)}
-          >
-            <FaHeart className="mr-2 text-xl" />
-            {isFavourite ? 'Favourited' : 'Mark as Favourite'}
-          </button>
-        </div>
-
         <button
           className={`${ADD_DRINK_BUTTON_STYLES} ${BUTTON_PRESSED_STYLES}`}
-          onClick={addDrinkToDatabase}
+          onClick={handleAddDrink}
         >
           Add Drink
         </button>
@@ -337,4 +334,4 @@ const AddDrinkPage = () => {
   );
 };
 
-export default AddDrinkPage;
+export default SelectDrinkPage;

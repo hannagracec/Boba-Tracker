@@ -1,5 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, collection, query, doc, getDocs } from "firebase/firestore";
+import firebaseConfig from '@/firebaseConfig';
+import { initializeApp } from 'firebase/app';
 
 const profile_icon = "/Dashboard/profile.svg";
 const right_arrow = "/Dashboard/arrow_right.svg";
@@ -19,7 +24,7 @@ const PROFILE_BUTTON_STYLES =
 const DASHBOARD_CONTENT_STYLES = "mt-10 max-w-[600px] w-full";
 const DASHBOARD_CONTENT_HEADER_STYLES = "font-semibold text-2xl ml-2 mb-2";
 
-const BOBA_SAVED_CONTAINER_STYLES = 
+const BOBA_SAVED_CONTAINER_STYLES =
   "mr-3 text-center flex flex-col justify-center border-2 border-black-ish rounded-md bg-pink-pink size-[105px]";
 const CATALOGUE_TEXT_STYLES = "font-semibold text-xs leading-[1.2] max-w-[230px]";
 
@@ -34,7 +39,38 @@ const BOBA_CATALOGUE_PANEL_STYLES =
 const VERTICAL_TILE_STYLES =
   "flex flex-col items-center justify-center h-[220px] bg-white-ish px-4 w-full max-w-[350px] border-2 border-black-ish rounded-lg shadow-b";
 
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
+
 const DashboardPage = () => {
+  const [userName, setUserName] = useState("Loading...");
+  const [numDrinksSaved, setNumDrinksSaved] = useState(0);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUserName(user.displayName || "User");
+
+        const userDocRef = doc(db, 'users', user.uid);
+        const drinksCollectionRef = collection(userDocRef, 'drinks');
+        const drinksQuery = query(drinksCollectionRef);
+
+        try {
+          const querySnapshot = await getDocs(drinksQuery);
+          setNumDrinksSaved(querySnapshot.size);
+        } catch (error) {
+          console.error("Error fetching drinks:", error);
+        }
+      } else {
+        window.location.href = "/SignUp";
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className={DASHBOARD_PAGE_STYLES}>
       <div className={PROFILE_TILE_STYLES}>
@@ -50,7 +86,7 @@ const DashboardPage = () => {
           <div>
             <div className="leading-[1]">
               <h1 className="font-black text-2xl">
-                Hi, User
+                Hi, {userName}
               </h1>
               <h3 className="font-semibold mb-3">
                 Welcome Back!
@@ -82,7 +118,7 @@ const DashboardPage = () => {
           >
             <div className={BOBA_SAVED_CONTAINER_STYLES}>
               {/* DYNAMICALLY CHANGE */}
-              <h1 className="font-black text-[40px]">10</h1>
+              <h1 className="font-black text-[40px]">{numDrinksSaved}</h1>
               <h3 className="font-semibold text-xs">
                 BOBA SAVED
               </h3>

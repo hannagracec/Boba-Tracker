@@ -1,6 +1,7 @@
+import { usePathname } from 'next/navigation';
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode } from "react";
 
 const house_icon = "/Navbar/house.svg";
 const catalogue_icon = "/Navbar/book.svg";
@@ -21,29 +22,10 @@ interface NavLinkProps {
 }
 
 const Navbar = () => {
-  const [currentPath, setCurrentPath] =
-    useState<string>("");
-
-  useEffect(() => {
-    const updatePath = () => {
-      setCurrentPath(window.location.pathname);
-    };
-
-    updatePath();
-
-    window.addEventListener("popstate", updatePath);
-
-    return () => {
-      window.removeEventListener("popstate", updatePath);
-    };
-  }, []);
+  const pathname = usePathname();
 
   const NavLink = ({ href, children }: NavLinkProps) => {
-    const isActive = currentPath === href;
-
-    const handleClick = () => {
-      setCurrentPath(href);
-    };
+    const isActive = pathname === href;
 
     return (
       <Link href={href}>
@@ -51,7 +33,6 @@ const Navbar = () => {
           className={
             isActive ? CURRENT_PAGE_ICON_STYLES : ""
           }
-          onClick={handleClick}
         >
           {children}
         </div>

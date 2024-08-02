@@ -5,7 +5,7 @@ import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import Image from 'next/image';
 import { initializeApp } from 'firebase/app';
 import { getAuth, User, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, doc, setDoc, addDoc, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, addDoc, getDoc } from 'firebase/firestore';
 import firebaseConfig from '@/firebaseConfig';
 
 const heart_icon = '/SelectDrink/chat_heart.svg';
@@ -41,7 +41,7 @@ const auth = getAuth(firebaseApp);
 const SelectDrinkPage = () => {
   const [selectedStore, setSelectedStore] = useState<{ name: string; drinks: { name: string; toppings: string[]; }[] } | null>(null);
   const [selectedDrink, setSelectedDrink] = useState<{ name: string; toppings: string[]; } | null>(null);
-  const [selectedTopping, setSelectedTopping] = useState('');
+  const [selectedToppings, setSelectedToppings] = useState<Set<string>>(new Set());
   const [sugarLevel, setSugarLevel] = useState(50);
   const [iceLevel, setIceLevel] = useState(50);
   const [rating, setRating] = useState(0);
@@ -86,6 +86,7 @@ const SelectDrinkPage = () => {
     const selectedStore = stores.find((s) => s.name === store);
     setSelectedStore(selectedStore || null);
     setSelectedDrink(null);
+    setSelectedToppings(new Set());
     setIsStoreDropdownOpen(false);
   };
 
@@ -93,13 +94,21 @@ const SelectDrinkPage = () => {
     if (selectedStore) {
       const selectedDrink = selectedStore.drinks.find((d) => d.name === drink);
       setSelectedDrink(selectedDrink || null);
+      setSelectedToppings(new Set());
       setIsDrinkDropdownOpen(false);
     }
   };
 
-  const handleToppingChange = (topping: string) => {
-    setSelectedTopping(topping);
-    setIsToppingDropdownOpen(false);
+  const handleToppingToggle = (topping: string) => {
+    setSelectedToppings((prevToppings) => {
+      const newToppings = new Set(prevToppings);
+      if (newToppings.has(topping)) {
+        newToppings.delete(topping);
+      } else {
+        newToppings.add(topping);
+      }
+      return newToppings;
+    });
   };
 
   const getSugarLabel = (value: number) => {
@@ -127,33 +136,36 @@ const SelectDrinkPage = () => {
       setMessageType('error');
       return;
     }
-
+  
     try {
       const user = auth.currentUser;
       if (!user) {
         throw new Error('User not authenticated');
       }
-
+  
+      const sugarLabel = getSugarLabel(sugarLevel);
+      const iceLabel = getIceLabel(iceLevel);
+  
       const userDocRef = doc(db, 'users', user.uid);
       const drinksCollectionRef = collection(userDocRef, 'drinks');
-
+  
       await addDoc(drinksCollectionRef, {
         store: selectedStore.name,
         drink: selectedDrink.name,
-        toppings: selectedTopping ? [selectedTopping] : [],
-        sugarLevel,
-        iceLevel,
+        toppings: Array.from(selectedToppings), 
+        sugarLevel: sugarLabel, 
+        iceLevel: iceLabel, 
         rating,
         isFavourite,
       });
-
+  
       setMessage('Drink added successfully!');
       setMessageType('success');
     } catch (error: any) {
       setMessage(`Error adding drink: ${error.message}`);
       setMessageType('error');
     }
-  };
+  };  
 
   return (
     <div className="p-4 text-black-ish overflow-y-auto pb-[160px] bg-off-white">
@@ -232,7 +244,7 @@ const SelectDrinkPage = () => {
               >
                 <div className="flex">
                   <Image src={star_icon} height={25} width={25} alt="Add topping icon" className="mr-2" />
-                  <span>{selectedTopping ? `Topping: ${selectedTopping}` : 'Select a topping'}</span>
+                  <span>{selectedToppings.size > 0 ? `Toppings: ${Array.from(selectedToppings).join(', ')}` : 'Select toppings'}</span>
                 </div>
                 <FaCaretDown />
               </div>
@@ -241,8 +253,8 @@ const SelectDrinkPage = () => {
                   {selectedDrink.toppings.map((topping) => (
                     <div
                       key={topping}
-                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                      onClick={() => handleToppingChange(topping)}
+                      className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${selectedToppings.has(topping) ? 'bg-gray-200' : ''}`}
+                      onClick={() => handleToppingToggle(topping)}
                     >
                       {topping}
                     </div>

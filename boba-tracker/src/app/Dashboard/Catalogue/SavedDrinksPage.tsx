@@ -140,8 +140,8 @@ const SavedDrinksPage = () => {
                     <p className="font-semibold">{drink.store}</p>
                   </div>
                   <p><strong>Toppings:</strong> {drink.toppings.join(', ') || 'None'}</p>
-                  <p><strong>Sugar:</strong> {drink.sugarLevel}%</p>
-                  <p><strong>Ice:</strong> {drink.iceLevel}%</p>
+                  <p><strong>Sugar:</strong> {typeof drink.sugarLevel === 'number' ? `${drink.sugarLevel}%` : drink.sugarLevel}</p>
+                  <p><strong>Temp/Ice:</strong> {typeof drink.iceLevel === 'number' ? `${drink.iceLevel}%` : drink.iceLevel}</p>
                 </div>
                 <div className="mt-auto flex justify-between items-center">
                   {drink.isFavourite ? (
@@ -166,7 +166,7 @@ const SavedDrinksPage = () => {
             ))}
             <Link href="/Dashboard/AddDrink">
               <div className={`${ADD_DRINKS_TILE_STYLES} ${BUTTON_PRESSED_STYLES}`}>
-                <Image src={add_icon} height={50} width={50} alt="Add icon" />
+                <Image src={add_icon} height={50} width={50} alt="Add icon" className="my-16" />
               </div>
             </Link>
           </div>

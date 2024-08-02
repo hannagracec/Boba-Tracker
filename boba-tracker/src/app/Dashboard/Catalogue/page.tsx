@@ -1,7 +1,10 @@
+"use client"
+import SavedDrinksPage from "./SavedDrinksPage";
+
 export default function Catalogue() {
   return (
     <div>
-      <div></div>
+      <SavedDrinksPage />
     </div>
   );
 }

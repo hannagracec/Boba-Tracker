@@ -11,8 +11,19 @@ const hollow_heart = "/Catalogue/heart_hollow.svg";
 const heart_icon = "/Catalogue/heart.svg";
 const add_icon = "/Catalogue/add_circle.svg";
 
-const ADD_DRINKS_TILE_STYLES = "p-3 h-full bg-white rounded-lg border-2 shadow-b border-black-ish flex justify-center items-center";
-const BUTTON_PRESSED_STYLES = 'focus:outline-black-ish transition-all duration-200 active:shadow-none active:translate-y-0.5 active:border-black-ish';
+const CATALOGUE_PAGE_STLYES = "p-4 text-black-ish overflow-y-auto pb-[160px] bg-off-white";
+
+const FILTERS_CONTAINER_STYLES = "px-4 py-1 border-2 border-black-ish rounded-[20px]";
+const SELECTED_FILTER_STTYLES = "bg-black-ish text-white";
+const UNSELECTED_FILTER_STYLES = "bg-white text-black-ish";
+
+const SAVED_DRINK_TILE_STYLES = 
+  "p-3 bg-white rounded-lg border-2 shadow-b border-black-ish flex flex-col justify-between";
+
+const ADD_DRINKS_TILE_STYLES = 
+  "p-3 h-full bg-white rounded-lg border-2 shadow-b border-black-ish flex justify-center items-center";
+const BUTTON_PRESSED_STYLES = 
+  'focus:outline-black-ish transition-all duration-200 active:shadow-none active:translate-y-0.5 active:border-black-ish';
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
@@ -20,7 +31,6 @@ const auth = getAuth(firebaseApp);
 
 const SavedDrinksPage = () => {
   const [savedDrinks, setSavedDrinks] = useState<any[]>([]);
-  const [message, setMessage] = useState('');
   const [filter, setFilter] = useState<'all' | 'highestRated' | 'favourites'>('all');
   const [sort, setSort] = useState<'none' | 'byStore' | 'byName'>('none');
 
@@ -39,7 +49,7 @@ const SavedDrinksPage = () => {
         const drinksData = drinksSnapshot.docs.map((doc) => doc.data());
         setSavedDrinks(drinksData);
       } catch (error: any) {
-        setMessage(`Error fetching drinks: ${error.message}`);
+        console.log(`Error fetching drinks: ${error.message}`);
       }
     };
 
@@ -65,26 +75,26 @@ const SavedDrinksPage = () => {
     });
 
   return (
-    <div className="p-4 text-black-ish overflow-y-auto pb-[160px] bg-off-white">
+    <div className={CATALOGUE_PAGE_STLYES}>
       <div>
         <h1 className="text-4xl mb-2 font-bold">Saved Drinks</h1>
         <div className="mb-6">
           <h2 className="font-semibold">Filters</h2>
           <div className="text-sm flex gap-2 mb-2">
             <button
-              className={`px-6 py-1 border-2 border-black-ish rounded-[20px] ${filter === 'all' ? 'bg-black-ish text-white' : 'bg-white text-black-ish'}`}
+              className={`${FILTERS_CONTAINER_STYLES} ${filter === 'all' ? SELECTED_FILTER_STTYLES : UNSELECTED_FILTER_STYLES}`}
               onClick={() => setFilter('all')}
             >
               All
             </button>
             <button
-              className={`px-4 py-1 border-2 border-black-ish rounded-[20px] ${filter === 'highestRated' ? 'bg-black-ish text-white' : 'bg-white text-black-ish'}`}
+              className={`${FILTERS_CONTAINER_STYLES} ${filter === 'highestRated' ? SELECTED_FILTER_STTYLES : UNSELECTED_FILTER_STYLES}`}
               onClick={() => setFilter('highestRated')}
             >
               Highest Rated
             </button>
             <button
-              className={`px-4 py-1 border-2 border-black-ish rounded-[20px] ${filter === 'favourites' ? 'bg-black-ish text-white' : 'bg-white text-black-ish'}`}
+              className={`${FILTERS_CONTAINER_STYLES} ${filter === 'favourites' ? SELECTED_FILTER_STTYLES : UNSELECTED_FILTER_STYLES}`}
               onClick={() => setFilter('favourites')}
             >
               Favourites
@@ -93,19 +103,19 @@ const SavedDrinksPage = () => {
           <h2 className="font-semibold">Sort By</h2>
           <div className="text-sm flex gap-2">
             <button
-              className={`px-6 py-1 border-2 border-black-ish rounded-[20px] ${sort === 'none' ? 'bg-black-ish text-white' : 'bg-white text-black-ish'}`}
+              className={`${FILTERS_CONTAINER_STYLES} ${sort === 'none' ? SELECTED_FILTER_STTYLES : UNSELECTED_FILTER_STYLES}`}
               onClick={() => setSort('none')}
             >
               None
             </button>
             <button
-              className={`px-4 py-1 border-2 border-black-ish rounded-[20px] ${sort === 'byStore' ? 'bg-black-ish text-white' : 'bg-white text-black-ish'}`}
+              className={`${FILTERS_CONTAINER_STYLES} ${sort === 'byStore' ? SELECTED_FILTER_STTYLES : UNSELECTED_FILTER_STYLES}`}
               onClick={() => setSort('byStore')}
             >
               Store
             </button>
             <button
-              className={`px-4 py-1 border-2 border-black-ish rounded-[20px] ${sort === 'byName' ? 'bg-black-ish text-white' : 'bg-white text-black-ish'}`}
+              className={`${FILTERS_CONTAINER_STYLES} ${sort === 'byName' ? SELECTED_FILTER_STTYLES : UNSELECTED_FILTER_STYLES}`}
               onClick={() => setSort('byName')}
             >
               Name
@@ -123,7 +133,7 @@ const SavedDrinksPage = () => {
         ) : (
           <div className="grid grid-cols-2 gap-4">
             {filteredDrinks.map((drink, index) => (
-              <div key={index} className="p-3 bg-white rounded-lg border-2 shadow-b border-black-ish flex flex-col justify-between">
+              <div key={index} className={SAVED_DRINK_TILE_STYLES}>
                 <div className="mb-2">
                   <div className="border-2 border-black-ish rounded-lg mb-4 p-2 bg-pink-pink">
                     <h2 className="text-xl font-bold">{drink.drink}</h2>

@@ -157,7 +157,7 @@ const SelectDrinkPage = () => {
 
   return (
     <div className="p-4 text-black-ish overflow-y-auto pb-[160px] bg-off-white">
-      <div className="bg-white-ish rounded-lg border-2 border-black-ish p-4">
+      <div className="bg-white-ish rounded-lg border-2 shadow-b border-black-ish p-4">
         <div className="flex items-center mb-6">
           <div className="mr-4 bg-pink-pink flex items-center justify-center rounded-lg border-2 border-black-ish p-4">
             <Image src={heart_icon} height={90} width={90} alt="Heart Icon" />

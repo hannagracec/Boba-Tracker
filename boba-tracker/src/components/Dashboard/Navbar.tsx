@@ -76,14 +76,6 @@ const Navbar = () => {
               alt="Browse shops icon"
             />
           </NavLink>
-          <NavLink href="/Dashboard/Profile">
-            <Image
-              src={profile_icon}
-              height={30}
-              width={30}
-              alt="Profile icon"
-            />
-          </NavLink>
         </div>
       </div>
     </div>

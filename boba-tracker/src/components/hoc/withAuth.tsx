@@ -1,5 +1,5 @@
+"use client";
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { getAuth } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import firebaseConfig from '@/firebaseConfig';
@@ -8,9 +8,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 
 const withAuth = (WrappedComponent: any) => {
-  return (props: any) => {
-    const router = useRouter();
-
+  const Wrapper = (props: any) => {
     useEffect(() => {
       const checkAuth = async () => {
         const user = await new Promise((resolve) => {
@@ -18,15 +16,17 @@ const withAuth = (WrappedComponent: any) => {
         });
 
         if (!user) {
-          router.push('/Login');
+          window.location.href = '/Login';
         }
       };
 
       checkAuth();
-    }, [router]);
+    }, []);
 
     return <WrappedComponent {...props} />;
   };
+
+  return Wrapper;
 };
 
 export default withAuth;

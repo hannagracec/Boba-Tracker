@@ -5,7 +5,7 @@ import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import Image from 'next/image';
 import { initializeApp } from 'firebase/app';
 import { getAuth, User, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, doc, addDoc, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, addDoc, getDoc, getDocs } from 'firebase/firestore';
 import firebaseConfig from '@/firebaseConfig';
 
 const heart_icon = '/SelectDrink/chat_heart.svg';
@@ -14,33 +14,25 @@ const heart_add = '/SelectDrink/heart_add.svg';
 const star_icon = '/SelectDrink/star_icon.svg';
 
 const FORM_SELECT_CONTAINER_STYLES = 'flex items-center bg-white justify-between w-full border-2 border-black-ish px-4 py-2 rounded-lg cursor-pointer';
+const DISABLED_DROPDOWN_STYLES = 'flex items-center bg-gray-200 justify-between w-full border-2 border-gray-400 px-4 py-2 rounded-lg cursor-not-allowed';
 const ADD_DRINK_BUTTON_STYLES = 'w-full py-2 px-4 bg-pink-pink rounded-full border-2 border-black-ish shadow-b mb-4 font-bold';
 const BUTTON_PRESSED_STYLES = 'focus:outline-black-ish transition-all duration-200 active:shadow-none active:translate-y-0.5 active:border-black-ish';
-
-const stores = [
-  {
-    name: 'Gong Cha',
-    drinks: [
-      { name: 'Milk Tea', toppings: ['Pearl', 'Pudding', 'Grass Jelly'] },
-      { name: 'Green Tea', toppings: ['Aloe', 'Pearl', 'Basil Seed'] },
-    ],
-  },
-  {
-    name: 'CoCo Fresh Tea',
-    drinks: [
-      { name: 'Bubble Milk Tea', toppings: ['Pearl', 'Red Bean', 'Pudding'] },
-      { name: 'Matcha Latte', toppings: ['Aloe', 'Coconut Jelly', 'Pearl'] },
-    ],
-  },
-];
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 
+interface StoreData {
+  id: string;
+  storeName: string;
+  menuItems: { drinkName: string; drinkPrices: string[]; ingredients: string; }[];
+  toppings: string[];
+}
+
 const SelectDrinkPage = () => {
-  const [selectedStore, setSelectedStore] = useState<{ name: string; drinks: { name: string; toppings: string[]; }[] } | null>(null);
-  const [selectedDrink, setSelectedDrink] = useState<{ name: string; toppings: string[]; } | null>(null);
+  const [stores, setStores] = useState<StoreData[]>([]);
+  const [selectedStore, setSelectedStore] = useState<StoreData | null>(null);
+  const [selectedDrink, setSelectedDrink] = useState<{ name: string; toppings: string[] } | null>(null);
   const [selectedToppings, setSelectedToppings] = useState<Set<string>>(new Set());
   const [sugarLevel, setSugarLevel] = useState(50);
   const [iceLevel, setIceLevel] = useState(50);
@@ -67,6 +59,34 @@ const SelectDrinkPage = () => {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const fetchStores = async () => {
+      try {
+        const storesCollection = collection(db, 'stores');
+        const storesSnapshot = await getDocs(storesCollection);
+
+        const storesList = storesSnapshot.docs.map((doc) => {
+          const data = doc.data() as {
+            storeName: string;
+            menuItems: { drinkName: string; drinkPrices: string[]; ingredients: string; }[];
+            toppings: string[];
+          };
+
+          return {
+            id: doc.id,
+            ...data,
+          };
+        });
+        
+        setStores(storesList);
+      } catch (error) {
+        console.error('Error fetching stores: ', error);
+      }
+    };
+
+    fetchStores();
+  }, []);
+
   const fetchUserData = async (user: User) => {
     try {
       const userDocRef = doc(db, 'users', user.uid);
@@ -82,19 +102,23 @@ const SelectDrinkPage = () => {
     }
   };
 
-  const handleStoreChange = (store: string) => {
-    const selectedStore = stores.find((s) => s.name === store);
-    setSelectedStore(selectedStore || null);
+  const handleStoreChange = (storeId: string) => {
+    const store = stores.find((s) => s.id === storeId);
+    setSelectedStore(store || null);
     setSelectedDrink(null);
     setSelectedToppings(new Set());
     setIsStoreDropdownOpen(false);
   };
 
-  const handleDrinkChange = (drink: string) => {
+  const handleDrinkChange = (drinkName: string) => {
     if (selectedStore) {
-      const selectedDrink = selectedStore.drinks.find((d) => d.name === drink);
-      setSelectedDrink(selectedDrink || null);
-      setSelectedToppings(new Set());
+      const drink = selectedStore.menuItems.find((d) => d.drinkName === drinkName);
+      if (drink) {
+        setSelectedDrink({ name: drink.drinkName, toppings: selectedStore.toppings });
+        setSelectedToppings(new Set());
+      } else {
+        setSelectedDrink(null);
+      }
       setIsDrinkDropdownOpen(false);
     }
   };
@@ -136,36 +160,36 @@ const SelectDrinkPage = () => {
       setMessageType('error');
       return;
     }
-  
+
     try {
       const user = auth.currentUser;
       if (!user) {
         throw new Error('User not authenticated');
       }
-  
+
       const sugarLabel = getSugarLabel(sugarLevel);
       const iceLabel = getIceLabel(iceLevel);
-  
+
       const userDocRef = doc(db, 'users', user.uid);
       const drinksCollectionRef = collection(userDocRef, 'drinks');
-  
+
       await addDoc(drinksCollectionRef, {
-        store: selectedStore.name,
+        store: selectedStore.storeName,
         drink: selectedDrink.name,
-        toppings: Array.from(selectedToppings), 
-        sugarLevel: sugarLabel, 
-        iceLevel: iceLabel, 
+        toppings: Array.from(selectedToppings),
+        sugarLevel: sugarLabel,
+        iceLevel: iceLabel,
         rating,
         isFavourite,
       });
-  
+
       setMessage('Drink added successfully!');
       setMessageType('success');
     } catch (error: any) {
       setMessage(`Error adding drink: ${error.message}`);
       setMessageType('error');
     }
-  };  
+  };
 
   return (
     <div className="p-4 text-black-ish overflow-y-auto pb-[160px] bg-off-white">
@@ -180,26 +204,30 @@ const SelectDrinkPage = () => {
         <div className="mb-4">
           <div className="relative">
             <div
-              className={FORM_SELECT_CONTAINER_STYLES}
-              onClick={() => setIsStoreDropdownOpen(!isStoreDropdownOpen)}
+              className={stores.length > 0 ? FORM_SELECT_CONTAINER_STYLES : DISABLED_DROPDOWN_STYLES}
+              onClick={() => stores.length > 0 && setIsStoreDropdownOpen(!isStoreDropdownOpen)}
             >
               <div className="flex items-center">
                 <Image src={shop_icon} height={25} width={25} alt="Select shop icon" className="mr-2" />
-                <span>{selectedStore ? selectedStore.name : 'Select a store'}</span>
+                <span>{selectedStore ? selectedStore.storeName : 'Select a store'}</span>
               </div>
               <FaCaretDown />
             </div>
-            {isStoreDropdownOpen && (
+            {isStoreDropdownOpen && stores.length > 0 && (
               <div className="absolute z-10 w-full bg-white border border-black-ish rounded-lg mt-1">
-                {stores.map((store) => (
-                  <div
-                    key={store.name}
-                    className="px-4 py-2 hover:bg-gray-200 cursor-pointer flex items-center"
-                    onClick={() => handleStoreChange(store.name)}
-                  >
-                    {store.name}
-                  </div>
-                ))}
+                {stores.length > 0 ? (
+                  stores.map((store) => (
+                    <div
+                      key={store.id}
+                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => handleStoreChange(store.id)}
+                    >
+                      {store.storeName}
+                    </div>
+                  ))
+                ) : (
+                  <div className="px-4 py-2 text-gray-500">No stores found</div>
+                )}
               </div>
             )}
           </div>
@@ -209,8 +237,8 @@ const SelectDrinkPage = () => {
           <div className="mb-4">
             <div className="relative">
               <div
-                className={FORM_SELECT_CONTAINER_STYLES}
-                onClick={() => setIsDrinkDropdownOpen(!isDrinkDropdownOpen)}
+                className={selectedStore.menuItems.length > 0 ? FORM_SELECT_CONTAINER_STYLES : DISABLED_DROPDOWN_STYLES}
+                onClick={() => selectedStore.menuItems.length > 0 && setIsDrinkDropdownOpen(!isDrinkDropdownOpen)}
               >
                 <div className="flex">
                   <Image src={heart_add} height={25} width={25} alt="Add drink icon" className="mr-2" />
@@ -218,29 +246,33 @@ const SelectDrinkPage = () => {
                 </div>
                 <FaCaretDown />
               </div>
-              {isDrinkDropdownOpen && (
+              {isDrinkDropdownOpen && selectedStore.menuItems.length > 0 && (
                 <div className="absolute z-10 w-full bg-white border border-black-ish rounded-lg mt-1">
-                  {selectedStore.drinks.map((drink) => (
-                    <div
-                      key={drink.name}
-                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                      onClick={() => handleDrinkChange(drink.name)}
-                    >
-                      {drink.name}
-                    </div>
-                  ))}
+                  {selectedStore.menuItems.length > 0 ? (
+                    selectedStore.menuItems.map((drink) => (
+                      <div
+                        key={drink.drinkName}
+                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                        onClick={() => handleDrinkChange(drink.drinkName)}
+                      >
+                        {drink.drinkName}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="px-4 py-2 text-gray-500">No drinks found</div>
+                  )}
                 </div>
               )}
             </div>
           </div>
         )}
 
-        {selectedDrink && (
+        {selectedDrink && selectedStore && (
           <div className="mb-4">
             <div className="relative">
               <div
-                className={FORM_SELECT_CONTAINER_STYLES}
-                onClick={() => setIsToppingDropdownOpen(!isToppingDropdownOpen)}
+                className={selectedStore.toppings.length > 0 ? FORM_SELECT_CONTAINER_STYLES : DISABLED_DROPDOWN_STYLES}
+                onClick={() => selectedStore.toppings.length > 0 && setIsToppingDropdownOpen(!isToppingDropdownOpen)}
               >
                 <div className="flex">
                   <Image src={star_icon} height={25} width={25} alt="Add topping icon" className="mr-2" />
@@ -248,17 +280,21 @@ const SelectDrinkPage = () => {
                 </div>
                 <FaCaretDown />
               </div>
-              {isToppingDropdownOpen && (
+              {isToppingDropdownOpen && selectedStore.toppings.length > 0 && (
                 <div className="absolute z-10 w-full bg-white border border-black-ish rounded-lg mt-1">
-                  {selectedDrink.toppings.map((topping) => (
-                    <div
-                      key={topping}
-                      className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${selectedToppings.has(topping) ? 'bg-gray-200' : ''}`}
-                      onClick={() => handleToppingToggle(topping)}
-                    >
-                      {topping}
-                    </div>
-                  ))}
+                  {selectedStore.toppings.length > 0 ? (
+                    selectedStore.toppings.map((topping) => (
+                      <div
+                        key={topping}
+                        className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${selectedToppings.has(topping) ? 'bg-gray-200' : ''}`}
+                        onClick={() => handleToppingToggle(topping)}
+                      >
+                        {topping}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="px-4 py-2 text-gray-500">No toppings found</div>
+                  )}
                 </div>
               )}
             </div>
@@ -341,7 +377,6 @@ const SelectDrinkPage = () => {
           </div>
         )}
       </div>
-
     </div>
   );
 };

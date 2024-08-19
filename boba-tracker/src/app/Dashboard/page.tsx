@@ -1,10 +1,13 @@
 "use client";
 import DashboardPage from "./DashboardPage";
+import withAuth from '@/src/components/hoc/withAuth';
 
-export default function Dashboard() {
+function Dashboard() {
   return (
     <div>
       <DashboardPage />
     </div>
   );
 }
+
+export default withAuth(Dashboard);

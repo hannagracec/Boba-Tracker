@@ -118,7 +118,7 @@ const SavedDrinksPage = () => {
               className={`${FILTERS_CONTAINER_STYLES} ${sort === 'byName' ? SELECTED_FILTER_STTYLES : UNSELECTED_FILTER_STYLES}`}
               onClick={() => setSort('byName')}
             >
-              Name
+              Drink
             </button>
           </div>
         </div>

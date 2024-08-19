@@ -1,61 +1,44 @@
 import Image from "next/image";
 import StoreTile from "@/src/components/BrowseStores/StoreTile";
 import MenuPopup from "@/src/components/BrowseStores/MenuPopup";
-import { use, useState } from "react";
-
-const shop_icon = "/Dashboard/shop.svg";
+import { useEffect, useState } from "react";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
+import firebaseConfig from '@/firebaseConfig';
+import { initializeApp } from 'firebase/app';
 
 interface StoreData {
   storeName: string;
   menuItems: Array<any>;
+  drinksFound: number;
 }
 
-const shopData = [
-  { 
-    storeName: "Gong Cha", 
-    drinksFound: 10,
-    menuItems: [
-      {
-        drinkName: "CoCo Milk Tea",
-        drinkPrices: ["M | $5.4", "L | $5.9"],
-        ingredients: "Brewed tea, non-dairy creamer"
-      },
-      {
-        drinkName: "Jasmine Milk Tea",
-        drinkPrices: ["M | $5.4", "L | $5.9"],
-        ingredients: "Brewed tea, non-dairy creamer"
-      },
-      {
-        drinkName: "CoCo Milk Tea",
-        drinkPrices: ["M | $5.4", "L | $5.9"],
-        ingredients: "Brewed tea, non-dairy creamer"
-      },
-      {
-        drinkName: "Jasmine Milk Tea",
-        drinkPrices: ["M | $5.4", "L | $5.9"],
-        ingredients: "Brewed tea, non-dairy creamer"
-      },
-      {
-        drinkName: "CoCo Milk Tea",
-        drinkPrices: ["M | $5.4", "L | $5.9"],
-        ingredients: "Brewed tea, non-dairy creamer"
-      },
-      {
-        drinkName: "Jasmine Milk Tea",
-        drinkPrices: ["M | $5.4", "L | $5.9"],
-        ingredients: "Brewed tea, non-dairy creamer"
-      }
-    ]
-  },
-  { storeName: "CoCo", drinksFound: 20 },
-  { storeName: "PurrTea", drinksFound: 15 },
-  { storeName: "THE MOON", drinksFound: 12 },
-];
+const shop_icon = "/Dashboard/shop.svg";
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
 
 const BrowseStoresPage = () => {
+  const [shopData, setShopData] = useState<StoreData[]>([]);
   const [selectedStore, setSelectedStore] = useState<StoreData | null>(null);
 
-  const handleStoreClick = (store: any) => {
+  useEffect(() => {
+    const fetchStores = async () => {
+      const storesCollection = collection(db, "stores");
+      const storesSnapshot = await getDocs(storesCollection);
+      const storesList = storesSnapshot.docs.map((doc) => {
+        const data = doc.data() as StoreData;
+        return {
+          ...data,
+          drinksFound: data.menuItems.length,
+        };
+      });
+      setShopData(storesList);
+    };
+
+    fetchStores();
+  }, []);
+
+  const handleStoreClick = (store: StoreData) => {
     setSelectedStore(store);
   };
 
@@ -80,8 +63,8 @@ const BrowseStoresPage = () => {
         <div className="grid grid-cols-2 gap-4 mt-4">
           {shopData.map((data, index) => (
             <StoreTile
-              key={index} 
-              storeName={data.storeName} 
+              key={index}
+              storeName={data.storeName}
               drinksFound={data.drinksFound} 
               onClick={() => handleStoreClick(data)}
             />

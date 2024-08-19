@@ -1,10 +1,13 @@
 "use client";
 import SelectDrinkPage from "./SelectDrinkPage";
+import withAuth from '@/src/components/hoc/withAuth';
 
-export default function AddDrink() {
+function AddDrink() {
   return (
     <div>
       <SelectDrinkPage />
     </div>
   );
 }
+
+export default withAuth(AddDrink);

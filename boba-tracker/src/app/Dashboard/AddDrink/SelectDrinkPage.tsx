@@ -7,6 +7,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, User, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, doc, addDoc, getDoc, getDocs } from 'firebase/firestore';
 import firebaseConfig from '@/firebaseConfig';
+import { useSearchParams } from 'next/navigation'; // Import useSearchParams
 
 const heart_icon = '/SelectDrink/chat_heart.svg';
 const shop_icon = '/SelectDrink/add_shop.svg';
@@ -45,6 +46,8 @@ const SelectDrinkPage = () => {
   const [username, setUsername] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
+
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -86,6 +89,24 @@ const SelectDrinkPage = () => {
 
     fetchStores();
   }, []);
+
+  useEffect(() => {
+    const storeName = searchParams.get('storeName');
+    const drinkName = searchParams.get('drinkName');
+
+    if (storeName && drinkName) {
+      const store = stores.find((s) => s.storeName === storeName);
+      if (store) {
+        setSelectedStore(store);
+
+        const drink = store.menuItems.find((d) => d.drinkName === drinkName);
+        if (drink) {
+          setSelectedDrink({ name: drink.drinkName, toppings: store.toppings });
+          setSelectedToppings(new Set());
+        }
+      }
+    }
+  }, [searchParams, stores]);
 
   const fetchUserData = async (user: User) => {
     try {
@@ -192,8 +213,8 @@ const SelectDrinkPage = () => {
   };
 
   return (
-    <div className="p-4 text-black-ish overflow-y-auto pb-[160px] bg-off-white">
-      <div className="bg-white-ish rounded-lg border-2 shadow-b border-black-ish p-4">
+    <div className="p-4 text-black-ish overflow-y-auto flex justify-center pb-[160px] bg-off-white">
+      <div className="bg-white-ish rounded-lg border-2 shadow-b border-black-ish p-4 max-w-[600px]">
         <div className="flex items-center mb-6">
           <div className="mr-4 bg-pink-pink flex items-center justify-center rounded-lg border-2 border-black-ish p-4">
             <Image src={heart_icon} height={90} width={90} alt="Heart Icon" />

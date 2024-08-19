@@ -11,7 +11,7 @@ const hollow_heart = "/Catalogue/heart_hollow.svg";
 const heart_icon = "/Catalogue/heart.svg";
 const add_icon = "/Catalogue/add_circle.svg";
 
-const CATALOGUE_PAGE_STLYES = "p-4 text-black-ish overflow-y-auto pb-[160px] bg-off-white";
+const CATALOGUE_PAGE_STLYES = "p-4 flex justify-center text-black-ish overflow-y-auto pb-[160px] bg-off-white";
 
 const FILTERS_CONTAINER_STYLES = "px-4 py-1 border-2 border-black-ish rounded-[20px]";
 const SELECTED_FILTER_STTYLES = "bg-black-ish text-white";
@@ -76,7 +76,7 @@ const SavedDrinksPage = () => {
 
   return (
     <div className={CATALOGUE_PAGE_STLYES}>
-      <div>
+      <div className="max-w-[600px]">
         <h1 className="text-4xl mb-2 font-bold">Saved Drinks</h1>
         <div className="mb-6">
           <h2 className="font-semibold">Filters</h2>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 const menu_icon = "/Dashboard/menu.svg";
@@ -30,21 +31,21 @@ const MenuPopup = ({ storeName, onClose, menuItems }: MenuPopupProps) => {
         <div className="p-4 rounded-t-lg border-2 border-black-ish bg-medium-pink">
           <div className="flex justify-between items-center">
             <div className="flex">
-                <Image
+              <Image
                 src={menu_icon}
                 height={25}
                 width={25}
                 alt="Menu icon"
                 className="mr-2"
-                />
-                <h2 className="text-2xl font-bold">{storeName}&apos;s Menu</h2>
+              />
+              <h2 className="text-2xl font-bold">{storeName}&apos;s Menu</h2>
             </div>
             <button onClick={onClose} className="text-xl font-bold">&times;</button>
           </div>
         </div>
         <div className="border-2 border-t-0 border-black-ish bg-white-ish rounded-b-lg p-3 shadow-b overflow-y-auto h-4/5">
           {menuItems.map((item, index) => (
-            <div 
+            <div
               key={index}
               className={`p-3 rounded-lg cursor-pointer leading-[1.2] ${
                 selectedDrink === item.drinkName ? 'bg-pastel-pink border-2 border-black-ish' : 'hover:bg-pink-100'
@@ -54,20 +55,33 @@ const MenuPopup = ({ storeName, onClose, menuItems }: MenuPopupProps) => {
               <h1 className="font-semibold text-xl">{item.drinkName}</h1>
               <div className="flex">
                 {item.drinkPrices.map((price, priceIndex) => (
-                    <h3 key={priceIndex} className="font-medium text-[15px]">
-                      {price}
-                    </h3>
+                  <h3 key={priceIndex} className="font-medium text-[15px]">
+                    {price}
+                  </h3>
                 ))}
               </div>
-              {selectedDrink != item.drinkName && (
+              {selectedDrink !== item.drinkName && (
                 <p className="text-[12px] font-medium mt-2">Tap for more info</p>
               )}
               {selectedDrink === item.drinkName && (
                 <div>
                   <p className="text-[15px] font-medium mt-3">Key Ingredients: {item.ingredients}</p>
-                  <button className={`${ADD_DRINK_BUTTON_STYLES} ${BUTTON_PRESSED_STYLES}`}>
-                    <p className="font-semibold text-[13px]">+ Add Drink to Catalogue</p>
-                  </button>
+                  <Link
+                    href={{
+                      pathname: '/Dashboard/AddDrink',
+                      query: {
+                        storeName,
+                        drinkName: selectedDrink,
+                      },
+                    }}
+                    passHref
+                  >
+                    <button
+                      className={`${ADD_DRINK_BUTTON_STYLES} ${BUTTON_PRESSED_STYLES}`}
+                    >
+                      <p className="font-semibold text-[13px]">+ Add Drink to Catalogue</p>
+                    </button>
+                  </Link>
                 </div>
               )}
             </div>

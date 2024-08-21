@@ -55,7 +55,7 @@ const MenuPopup = ({ storeName, onClose, menuItems }: MenuPopupProps) => {
               <h1 className="font-semibold text-xl">{item.drinkName}</h1>
               <div className="flex">
                 {item.drinkPrices.map((price, priceIndex) => (
-                  <h3 key={priceIndex} className="font-medium text-[15px]">
+                  <h3 key={priceIndex} className="font-medium mr-2 text-[15px]">
                     {price}
                   </h3>
                 ))}

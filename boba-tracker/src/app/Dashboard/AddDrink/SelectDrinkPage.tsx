@@ -18,6 +18,8 @@ const FORM_SELECT_CONTAINER_STYLES = 'flex items-center bg-white justify-between
 const DISABLED_DROPDOWN_STYLES = 'flex items-center bg-gray-200 justify-between w-full border-2 border-gray-400 px-4 py-2 rounded-lg cursor-not-allowed';
 const ADD_DRINK_BUTTON_STYLES = 'w-full py-2 px-4 bg-pink-pink rounded-full border-2 border-black-ish shadow-b mb-4 font-bold';
 const BUTTON_PRESSED_STYLES = 'focus:outline-black-ish transition-all duration-200 active:shadow-none active:translate-y-0.5 active:border-black-ish';
+const DROPDOWN_MENU_STYLES = 'absolute z-10 w-full bg-white border border-black-ish rounded-lg mt-1 max-h-40 overflow-y-auto';
+
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
@@ -235,7 +237,7 @@ const SelectDrinkPage = () => {
               <FaCaretDown />
             </div>
             {isStoreDropdownOpen && stores.length > 0 && (
-              <div className="absolute z-10 w-full bg-white border border-black-ish rounded-lg mt-1">
+              <div className={DROPDOWN_MENU_STYLES}>
                 {stores.length > 0 ? (
                   stores.map((store) => (
                     <div
@@ -268,7 +270,7 @@ const SelectDrinkPage = () => {
                 <FaCaretDown />
               </div>
               {isDrinkDropdownOpen && selectedStore.menuItems.length > 0 && (
-                <div className="absolute z-10 w-full bg-white border border-black-ish rounded-lg mt-1">
+                <div className={DROPDOWN_MENU_STYLES}>
                   {selectedStore.menuItems.length > 0 ? (
                     selectedStore.menuItems.map((drink) => (
                       <div
@@ -302,7 +304,7 @@ const SelectDrinkPage = () => {
                 <FaCaretDown />
               </div>
               {isToppingDropdownOpen && selectedStore.toppings.length > 0 && (
-                <div className="absolute z-10 w-full bg-white border border-black-ish rounded-lg mt-1">
+                <div className={DROPDOWN_MENU_STYLES}>
                   {selectedStore.toppings.length > 0 ? (
                     selectedStore.toppings.map((topping) => (
                       <div

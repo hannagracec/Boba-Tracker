@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from 'react';
 import { FaStar, FaHeart, FaCaretDown } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

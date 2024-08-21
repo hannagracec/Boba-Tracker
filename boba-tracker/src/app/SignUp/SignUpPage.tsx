@@ -1,7 +1,10 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, fetchSignInMethodsForEmail } from 'firebase/auth';
-import { getFirestore, collection, addDoc, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import firebaseConfig from '@/firebaseConfig';
 import Link from 'next/link';
@@ -16,11 +19,12 @@ const SignUpPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [signedUp, setSignedUp] = useState(false);
 
+  const router = useRouter(); // Use router for navigation
   const firebaseApp = initializeApp(firebaseConfig);
   const auth = getAuth(firebaseApp);
   const db = getFirestore(firebaseApp);
 
-  const checkExistingEmail = async (email: any) => {
+  const checkExistingEmail = async (email: string) => {
     try {
       const methods = await fetchSignInMethodsForEmail(auth, email);
       return methods.length > 0;
@@ -59,6 +63,10 @@ const SignUpPage = () => {
       if (error.code === 'auth/weak-password') {
         const errorMessageParts = error.message.split(':');
         setError(errorMessageParts.length > 1 ? errorMessageParts[1].trim() : 'An unknown error occurred');
+      } else if (error.code === 'auth/email-already-in-use') {
+        setError('This email is already in use');
+      } else {
+        setError('An error occurred during signup');
       }
     }
   };
@@ -79,9 +87,9 @@ const SignUpPage = () => {
 
   useEffect(() => {
     if (signedUp) {
-      window.location.href = '/Dashboard'; // Redirect to Dashboard or any other page after signup
+      router.push('/Dashboard');
     }
-  }, [signedUp]);
+  }, [signedUp, router]);
 
   return (
     <div className="text-black-ish p-6 w-full max-w-[500px]">

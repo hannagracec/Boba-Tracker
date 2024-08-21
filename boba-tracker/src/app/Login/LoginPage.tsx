@@ -1,3 +1,5 @@
+"use client";
+
 import firebaseConfig from "@/firebaseConfig";
 import { initializeApp } from "firebase/app";
 import {
@@ -7,6 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const solid_star = "/LoginAndSignup/solid_star.svg";
 
@@ -18,7 +21,7 @@ const LOGIN_HEADER_STYLES = "text-3xl font-black mb-4";
 
 const LOGIN_INPUT_CONTAINER_STYLES =
   "mb-4 w-full bg-white-ish border-2 border-black-ish rounded-lg p-2 text-xl";
-const LOGIN_INPUT_FOCUSED_STLYES =
+const LOGIN_INPUT_FOCUSED_STYLES =
   "focus:outline-none focus:shadow-b transition-all duration-200 focus:-translate-y-1";
 
 const LOGIN_BUTTON_STYLES =
@@ -35,6 +38,7 @@ const LoginPage = () => {
 
   const firebaseApp = initializeApp(firebaseConfig);
   const auth = getAuth(firebaseApp);
+  const router = useRouter();
 
   const handleSignIn = async () => {
     try {
@@ -43,7 +47,7 @@ const LoginPage = () => {
         email,
         password
       );
-      window.location.href = "/Dashboard";
+      router.push("/Dashboard");
     } catch (error) {
       console.error("Error signing in:", error);
       setError("Invalid email or password");
@@ -66,13 +70,13 @@ const LoginPage = () => {
             placeholder="Enter Email"
             type="text"
             onChange={(e) => setEmail(e.target.value)}
-            className={`${LOGIN_INPUT_CONTAINER_STYLES} ${LOGIN_INPUT_FOCUSED_STLYES}`}
+            className={`${LOGIN_INPUT_CONTAINER_STYLES} ${LOGIN_INPUT_FOCUSED_STYLES}`}
           />
           <input
             placeholder="Enter Password"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
-            className={`${LOGIN_INPUT_CONTAINER_STYLES} ${LOGIN_INPUT_FOCUSED_STLYES}`}
+            className={`${LOGIN_INPUT_CONTAINER_STYLES} ${LOGIN_INPUT_FOCUSED_STYLES}`}
           />
           {error && (
             <p className="font-semibold">* {error}</p>

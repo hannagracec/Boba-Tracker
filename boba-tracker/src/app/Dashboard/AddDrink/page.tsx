@@ -1,12 +1,13 @@
 "use client";
 import SelectDrinkPage from "./SelectDrinkPage";
+import React, { Suspense }from 'react';
 import withAuth from '@/src/components/hoc/withAuth';
 
 function AddDrink() {
   return (
-    <div>
+    <Suspense fallback={<div>Loading...</div>}>
       <SelectDrinkPage />
-    </div>
+    </Suspense>
   );
 }
 

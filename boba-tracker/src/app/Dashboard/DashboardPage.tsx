@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { getFirestore, collection, doc, getDocs, query } from "firebase/firestore";
-import firebaseConfig from '@/firebaseConfig';
-import { initializeApp } from 'firebase/app';
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { collection, doc, getDocs, query } from "firebase/firestore";
+import { auth, db } from '@/src/app/firebaseClient';
 
 const profile_icon = "/Dashboard/profile.svg";
 const logout_icon = "/Dashboard/logout_icon.svg";
@@ -38,10 +37,6 @@ const BOBA_CATALOGUE_PANEL_STYLES =
 
 const VERTICAL_TILE_STYLES =
   "flex flex-col items-center justify-center h-[220px] bg-white-ish px-4 w-full max-w-[350px] border-2 border-black-ish rounded-lg shadow-b";
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
-const auth = getAuth(firebaseApp);
 
 const DashboardPage = () => {
   const [userName, setUserName] = useState("Loading...");

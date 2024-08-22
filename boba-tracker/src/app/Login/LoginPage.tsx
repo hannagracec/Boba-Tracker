@@ -1,11 +1,7 @@
 "use client";
 
-import firebaseConfig from "@/firebaseConfig";
-import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { auth } from '@/src/app/firebaseClient';
+import { signInWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -36,8 +32,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const firebaseApp = initializeApp(firebaseConfig);
-  const auth = getAuth(firebaseApp);
   const router = useRouter();
 
   const handleSignIn = async () => {

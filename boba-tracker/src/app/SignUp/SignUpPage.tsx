@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, fetchSignInMethodsForEmail } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, updateProfile, fetchSignInMethodsForEmail } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import firebaseConfig from '@/firebaseConfig';
+import { auth, db } from '@/src/app/firebaseClient';
 import Link from 'next/link';
 
 const solid_star = "/LoginAndSignup/solid_star.svg";
@@ -20,9 +19,6 @@ const SignUpPage = () => {
   const [signedUp, setSignedUp] = useState(false);
 
   const router = useRouter();
-  const firebaseApp = initializeApp(firebaseConfig);
-  const auth = getAuth(firebaseApp);
-  const db = getFirestore(firebaseApp);
 
   const checkExistingEmail = async (email: string) => {
     try {

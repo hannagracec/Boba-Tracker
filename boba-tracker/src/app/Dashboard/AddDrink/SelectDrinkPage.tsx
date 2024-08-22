@@ -4,11 +4,10 @@ import { FaStar, FaHeart, FaCaretDown } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
-import { initializeApp } from 'firebase/app';
-import { getAuth, User, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, doc, addDoc, getDoc, getDocs } from 'firebase/firestore';
-import firebaseConfig from '@/firebaseConfig';
-import { useSearchParams } from 'next/navigation'; // Import useSearchParams
+import { auth, db } from '@/src/app/firebaseClient';
+import { User, onAuthStateChanged } from 'firebase/auth';
+import { collection, doc, addDoc, getDoc, getDocs } from 'firebase/firestore';
+import { useSearchParams } from 'next/navigation';
 
 const heart_icon = '/SelectDrink/chat_heart.svg';
 const shop_icon = '/SelectDrink/add_shop.svg';
@@ -20,11 +19,6 @@ const DISABLED_DROPDOWN_STYLES = 'flex items-center bg-gray-200 justify-between 
 const ADD_DRINK_BUTTON_STYLES = 'w-full py-2 px-4 bg-pink-pink rounded-full border-2 border-black-ish shadow-b mb-4 font-bold';
 const BUTTON_PRESSED_STYLES = 'focus:outline-black-ish transition-all duration-200 active:shadow-none active:translate-y-0.5 active:border-black-ish';
 const DROPDOWN_MENU_STYLES = 'absolute z-10 w-full bg-white border border-black-ish rounded-lg mt-1 max-h-40 overflow-y-auto';
-
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
-const auth = getAuth(firebaseApp);
 
 interface StoreData {
   id: string;

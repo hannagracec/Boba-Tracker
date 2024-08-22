@@ -2,9 +2,8 @@ import Image from "next/image";
 import StoreTile from "@/src/components/BrowseStores/StoreTile";
 import MenuPopup from "@/src/components/BrowseStores/MenuPopup";
 import { useEffect, useState } from "react";
-import { collection, getDocs, getFirestore } from "firebase/firestore";
-import firebaseConfig from '@/firebaseConfig';
-import { initializeApp } from 'firebase/app';
+import { collection, getDocs } from "firebase/firestore";
+import { db } from '@/src/app/firebaseClient';
 
 interface StoreData {
   storeName: string;
@@ -19,9 +18,6 @@ const BROWSE_STORES_HEADER_CONTAINER_STYLES = "bg-white-ish border-2 border-blac
 const HEADER_ICON_CONTAINER_STYLES = 
   "mr-4 bg-deep-coral rounded-full p-4 size-16 flex min-w-16 justify-center items-center border-2 border-black-ish";
 const HEADER_TEXT_STYLES = "text-[10px] leading-[1.2] font-medium max-w-[300px]";
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
 
 const BrowseStoresPage = () => {
   const [shopData, setShopData] = useState<StoreData[]>([]);

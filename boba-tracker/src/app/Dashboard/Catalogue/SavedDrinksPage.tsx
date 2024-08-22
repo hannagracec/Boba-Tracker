@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc } from 'firebase/firestore';
+import { db, auth } from '@/src/app/firebaseClient';
 import Image from 'next/image';
-import firebaseConfig from '@/firebaseConfig';
-import { initializeApp } from 'firebase/app';
 import Link from "next/link";
 
 const star_icon = "/Catalogue/star_outline.svg";
@@ -24,10 +22,6 @@ const ADD_DRINKS_TILE_STYLES =
   "p-3 h-full bg-white rounded-lg border-2 shadow-b border-black-ish flex justify-center items-center";
 const BUTTON_PRESSED_STYLES = 
   'focus:outline-black-ish transition-all duration-200 active:shadow-none active:translate-y-0.5 active:border-black-ish';
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
-const auth = getAuth(firebaseApp);
 
 const SavedDrinksPage = () => {
   const [savedDrinks, setSavedDrinks] = useState<any[]>([]);

@@ -42,11 +42,10 @@ const LoginPage = () => {
 
   const handleSignIn = async () => {
     try {
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const trimmedEmail = email.trim();
+      const trimmedPassword = password.trim();
+
+      await signInWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
       router.push("/Dashboard");
     } catch (error) {
       console.error("Error signing in:", error);

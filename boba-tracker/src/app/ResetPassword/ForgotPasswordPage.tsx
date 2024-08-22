@@ -33,7 +33,9 @@ const ForgotPasswordPage = () => {
   };
 
   const handlePasswordReset = async () => {
-    if (!validateEmail(email)) {
+    const trimmedEmail = email.trim();
+
+    if (!validateEmail(trimmedEmail)) {
       setError("Invalid email address");
       return;
     }

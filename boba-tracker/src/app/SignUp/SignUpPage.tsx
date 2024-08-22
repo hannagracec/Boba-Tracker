@@ -19,7 +19,7 @@ const SignUpPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [signedUp, setSignedUp] = useState(false);
 
-  const router = useRouter(); // Use router for navigation
+  const router = useRouter();
   const firebaseApp = initializeApp(firebaseConfig);
   const auth = getAuth(firebaseApp);
   const db = getFirestore(firebaseApp);
@@ -48,15 +48,20 @@ const SignUpPage = () => {
 
   const createUser = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // Trim whitespace from email and username
+      const trimmedEmail = email.trim();
+      const trimmedUsername = username.trim();
+      const trimmedPassword = password.trim();
+
+      const userCredential = await createUserWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
       const user = userCredential.user;
 
       await updateProfile(user, {
-        displayName: username,
+        displayName: trimmedUsername,
       });
 
       const userDocRef = doc(db, 'users', user.uid);
-      await setDoc(userDocRef, { email, username }, { merge: true });
+      await setDoc(userDocRef, { email: trimmedEmail, username: trimmedUsername }, { merge: true });
 
       setSignedUp(true);
     } catch (error: any) {
@@ -76,7 +81,9 @@ const SignUpPage = () => {
       return;
     }
 
-    const emailExists = await checkExistingEmail(email);
+    const trimmedEmail = email.trim();
+    
+    const emailExists = await checkExistingEmail(trimmedEmail);
     if (emailExists) {
       setError('This email already exists');
       return;

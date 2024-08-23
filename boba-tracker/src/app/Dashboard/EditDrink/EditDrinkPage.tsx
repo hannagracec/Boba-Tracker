@@ -6,6 +6,8 @@ import { auth, db } from '@/src/app/firebaseClient';
 import Link from 'next/link';
 import { collection, doc, updateDoc, getDocs, getDoc, setDoc } from 'firebase/firestore';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 const edit_icon = '/SelectDrink/edit_heart.svg';
 const shop_icon = '/SelectDrink/add_shop.svg';
@@ -413,8 +415,14 @@ const EditDrinkPage = () => {
         </div>
 
         {message && (
-          <div className={`mt-4 p-2 ${messageType === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} border border-${messageType === 'success' ? 'green' : 'red'}-400 rounded-lg`}>
-            {message}
+            <div className="flex items-center justify-center mb-2">
+            <FontAwesomeIcon
+              icon={messageType === 'error' ? faTimesCircle : faCheckCircle}
+              className="text-black-ish mr-2"
+            />
+            <p className="text-black-ish">
+              {message}
+            </p>
           </div>
         )}
       </div>

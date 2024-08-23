@@ -181,12 +181,14 @@ const SavedDrinksPage = () => {
               >
                 <div className="mb-2">
                   <div className="border-2 border-black-ish rounded-lg mb-4 p-2 bg-pink-pink">
-                    <h2 className="text-xl font-bold">{drink.drink}</h2>
+                    <h2 className="text-l font-bold break-words">{drink.drink}</h2>
                     <p className="font-semibold">{drink.store}</p>
                   </div>
-                  <p><strong>Toppings:</strong> {drink.toppings.join(', ') || 'None'}</p>
-                  <p><strong>Sugar:</strong> {typeof drink.sugarLevel === 'number' ? `${drink.sugarLevel}%` : drink.sugarLevel}</p>
-                  <p><strong>Temp/Ice:</strong> {typeof drink.iceLevel === 'number' ? `${drink.iceLevel}%` : drink.iceLevel}</p>
+                  <div className="text-sm">
+                    <p><strong>Toppings:</strong> {drink.toppings.join(', ') || 'None'}</p>
+                    <p><strong>Sugar:</strong> {typeof drink.sugarLevel === 'number' ? `${drink.sugarLevel}%` : drink.sugarLevel}</p>
+                    <p><strong>Temp/Ice:</strong> {typeof drink.iceLevel === 'number' ? `${drink.iceLevel}%` : drink.iceLevel}</p>
+                  </div>
                 </div>
                 <div className="mt-auto flex justify-between items-center">
                   {drink.isFavourite ? (

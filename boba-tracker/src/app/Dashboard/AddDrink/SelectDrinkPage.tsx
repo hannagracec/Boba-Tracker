@@ -151,6 +151,8 @@ const SelectDrinkPage = () => {
       }
       return newToppings;
     });
+
+    setIsToppingDropdownOpen(false);
   };
 
   const getSugarLabel = (value: number) => {
@@ -304,7 +306,7 @@ const SelectDrinkPage = () => {
                     selectedStore.toppings.map((topping) => (
                       <div
                         key={topping}
-                        className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${selectedToppings.has(topping) ? 'bg-gray-200' : ''}`}
+                        className={`px-4 py-2 hover:bg-light-pink cursor-pointer ${selectedToppings.has(topping) ? 'bg-medium-pink font-semibold' : ''}`}
                         onClick={() => handleToppingToggle(topping)}
                       >
                         {topping}

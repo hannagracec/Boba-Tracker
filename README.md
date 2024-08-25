@@ -4,7 +4,7 @@
 
 ## Overview ✨
 
-The **Boba Tracker App** is a mobile application designed to help users track their favorite boba (bubble tea) drinks from various stores. Whether you're a boba enthusiast or just exploring the world of bubble tea, this app provides a convenient way to catalog and manage your boba preferences.
+The **Boba Tracker App** is a web application designed to help users track their favourite boba (bubble tea) drinks from various stores. Whether you're a boba enthusiast or just exploring the world of bubble tea, this app provides a convenient way to catalogue and manage your boba preferences.
 
 ## Features 💐
 
